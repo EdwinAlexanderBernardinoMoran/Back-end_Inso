@@ -1,13 +1,14 @@
 const express = require('express');
 const { json } = require('express')
-const port  = 300| process.env.PORT;
+const port  = process.env.PORT || 4000;
 const cors = require('cors')
 
 //initialization
 const app = express();
 
 //configurations
-app.set('port' , port);
+app.set('port', port);
+
 const whiteList = ['http://localhost', 'https://myapp.com'];
 const options = {
     origin: (origin, callback) => {
@@ -27,6 +28,10 @@ const options = {
 //     next()
 //   })
 app.use(json());
-app.use(cors(options))
+app.use(cors(options));
 
 //routes
+
+//middlares
+
+module.exports = app;
