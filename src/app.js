@@ -2,6 +2,7 @@ const express = require('express');
 const { json } = require('express')
 const port  = process.env.PORT || 4000;
 const cors = require('cors')
+const routerApi = require('./routes')
 
 //initialization
 const app = express();
@@ -9,7 +10,7 @@ const app = express();
 //configurations
 app.set('port', port);
 
-const whiteList = ['http://localhost', 'https://myapp.com'];
+const whiteList = ['http://localhost:4000', 'https://myapp.com'];
 const options = {
     origin: (origin, callback) => {
         if (whiteList.includes(origin) || !origin) {
@@ -31,7 +32,18 @@ app.use(json());
 app.use(cors(options));
 
 //routes
+routerApi(app);
 
 //middlares
+const ErrorsHandler = require('../middlewares/errorsHandler')
+const errorsHandler = new ErrorsHandler()
+app.use(errorsHandler.logErrors);
+app.use(errorsHandler.errorHandler);
+app.use(errorsHandler.boomErrorHandler);
+app.use(errorsHandler.ormErrorHandler);
+
+setTimeout(() => {
+    console.clear()
+}, 1000000);
 
 module.exports = app;
